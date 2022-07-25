@@ -1,0 +1,18 @@
+{
+  "name": "sira",
+  "version": "1.0.0",
+  "description": "Api no oficial del sistema SIRA de la Universidad del Valle",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "start:dev": "nodemon index.js"
+  },
+  "author": "Jota Lopez",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "playwright": "^1.23.4"
+  }
+}
