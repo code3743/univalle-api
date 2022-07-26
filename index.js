@@ -8,7 +8,6 @@ const app = express();
 app.use(express.urlencoded({extended: false, type: 'application/x-www-form-urlencoded'}));
 app.use(express.static(publicPath));
 
-
 const obtenerInformacion = () => {
     let bloqueInformacionPersonal = document.querySelector('table>tbody>tr>td>table>tbody>tr>td>font').innerText.split('\n');
     let bloquesIndividuales = new Array(bloqueInformacionPersonal.length);
@@ -36,6 +35,7 @@ const obtenerInformacion = () => {
         corre: bloquesIndividuales[3]
         }
 }
+
 const obtenerCalificaciones = ()=>{
   const coleccionTablas = document.querySelectorAll('.tituloIndex>table>tbody>tr>td>table[width="95%"]>tbody')[1].querySelectorAll('tr>td>table[cellspacing="1"]')
   const todasLasCalificaciones = new Array(coleccionTablas.length);
@@ -101,7 +101,6 @@ const obtenerCalificaciones = ()=>{
     todosLosPeriodos: todasLasCalificaciones
   }
 }
-
 
 const obtenerTabulado = () =>{
     const tablasAsignaturas = document.querySelectorAll('table>tbody>tr>td>table');
@@ -442,6 +441,163 @@ app.get("/restaurante", function(req,res){
 .catch((err)=> res.sendStatus(500))
 .finally(async() => await navegador.close() )
 });
+
+app.get("/opac", function(req, res){
+
+  let navegador;
+  const codigo = req.query.codigo;
+  (async ()=>{
+    navegador = await chromium.launch();
+    const page = await navegador.newPage();
+    await page.goto("https://opac.univalle.edu.co/cgi-olib/");
+    await page.waitForLoadState();
+    await page.fill('input[id="login1"]', codigo)
+    await page.evaluate(()=>{
+        document.querySelector('input[value=" Ingresar "]').click()
+       
+    })
+    
+    await page.waitForTimeout(10000)
+    const evaluarUsuario = await page.evaluate(()=>{
+        if(document.querySelector('#login1') == null){
+            return true
+        }else return false;
+    });
+    await page.waitForTimeout(10000);
+    if(evaluarUsuario){
+      const fechaExpiracion = await page.evaluate(()=>{
+          return document.querySelector('#user_expdate_text').innerText
+      });
+      const multa = await page.evaluate(()=>{
+          return document.querySelector('#user_CURBAL_text').innerText
+      });
+      const librosPrestados = await page.evaluate(()=>{
+          if(document.querySelector('#tabcontent_Title1>#user_tab_loan>.details_tab_copy>.tabcont_vscroll_full>table>tbody') != null){
+              const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr')
+              const libro = new Array(5);
+              const prestamos = new Array(libros.length - 1);
+              for(let i=0; i<libros.length - 1; i++){
+                  for(let j=0; j < libros[i + 1].querySelectorAll('td').length - 1; j++){
+                      libro[j] = libros[i + 1].querySelectorAll('td')[j].innerText;
+                      }
+                  prestamos[i] = {
+                      index: i + 1,
+                      codigo:libro[0],
+                      titulo: libro[1],
+                      fecha: libro[3],
+                      multa:libro[4]
+                  }
+              }
+              return prestamos
+          }
+          document.querySelector('#tab_Title3').click();
+          return []
+      });
+  
+      const historialPrestamos = await page.evaluate(()=>{
+          if(document.querySelector('#tabcontent_Title3>#user_tab_hist>.details_tab_copy>table>tbody') != null){
+              const  libros = document.querySelector('.details_tab_copy>table>tbody').querySelectorAll('tr');
+              const libro = new Array(5);
+              const historial = new Array(libros.length - 1);
+              for(let i=0; i<libros.length - 1; i++){
+                  for(let j=0; j < libros[i + 1].querySelectorAll('td').length; j++){
+                      libro[j] = libros[i + 1].querySelectorAll('td')[j].innerText;
+                  }
+                  historial[i] = {
+                      codigo:libro[0],
+                      titulo: libro[1],
+                      fecha: libro[4],
+                  }
+              }
+              return historial;
+          }
+         return []
+      });
+
+      res.send({
+          fechaExpiracion,
+          multa,
+          librosPrestados,
+          historialPrestamos 
+         })
+  
+  }else{
+        res.send({
+          fechaExpiracion: '',
+          multa: '',
+          librosPrestados:[],
+          historialPrestamos:[] 
+         })
+  }
+})()
+  .catch(err => res.sendStatus(500))
+  .finally(async() => await navegador.close());
+});
+
+app.get("/opac-actualizar-libro",function(req,res){
+  let navegador;
+  const codigo = req.query.codigo;
+  const libro = parseInt(req.query.libro);
+  (async ()=>{
+    navegador = await chromium.launch();
+    const page = await navegador.newPage();
+    await page.goto("https://opac.univalle.edu.co/cgi-olib/");
+    await page.waitForLoadState();
+    await page.fill('input[id="login1"]', codigo)
+    await page.evaluate(()=>{
+        document.querySelector('input[value=" Ingresar "]').click()
+    })
+    await page.waitForTimeout(10000);
+
+    const actualizarLibro = await page.evaluate((index)=>{
+      const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr')
+      libros[index].querySelectorAll('td')[5].querySelector('span>img').click()  
+      return libros[index].querySelectorAll('td')[5].textContent
+    }, libro);
+
+    res.send({
+      estado: actualizarLibro
+    })
+    await page.close()
+  })()
+  .catch(err => res.sendStatus(500))
+  .finally(async() => await navegador.close());
+});
+
+
+app.get("/opac-actualizar-todo",function(req,res){
+  let navegador;
+  const codigo = req.query.codigo;
+  (async ()=>{
+    navegador = await chromium.launch();
+    const page = await navegador.newPage();
+    await page.goto("https://opac.univalle.edu.co/cgi-olib/");
+    await page.waitForLoadState();
+    await page.fill('input[id="login1"]', codigo)
+    await page.evaluate(()=>{
+        document.querySelector('input[value=" Ingresar "]').click()
+    })
+    await page.waitForTimeout(10000);
+
+    const actualizarTosoLosLibros = await page.evaluate(()=>{
+      const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr');
+      document.querySelector('img[title="Renovar todos los artículos"]').click()
+      const estados = new Array(libros.length - 1);
+      for(let i=0; i<libros.length - 1; i++){
+          estados[i] = libros[index + 1].querySelectorAll('td')[5].textContent
+      }
+     return estados
+    });
+
+    res.send({
+      estado: actualizarTosoLosLibros
+    })
+    await page.close()
+  })()
+  .catch(err => res.sendStatus(500))
+  .finally(async() => await navegador.close());
+});
+
 
 app.listen(process.env.PORT, (err) => {
   if (err) throw new Error(err);
