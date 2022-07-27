@@ -262,18 +262,12 @@ app.post("/tabulado", function(req, res){
       });
       await page.click('input[title="Consultar Tabulado"]');
       await page.waitForLoadState();
-      // const tabuladoImpreso = await page.content();
-      // console.log(tabuladoImpreso);
+
       ejemplo = await page.pdf({path: ruta})
-      // console.log(ejemplo)
-      const tabulado = await page.evaluate(obtenerTabulado);
-      // var data = fs.readFileSync('t.pdf');
-      // console.log(data)
-      // res.contentType("application/pdf");
-      // res.send(data);
+
+      // const tabulado = await page.evaluate(obtenerTabulado);
+
       res.download(ruta)
-      // res.sendFile(ruta)
-      // res.send(tabulado)
 
       
       await page.close();
