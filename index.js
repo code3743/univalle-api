@@ -1,6 +1,7 @@
 const express = require("express");
 const { chromium } = require("playwright");
 const path = require("path");
+const fs = require('fs').promises;
 require("dotenv").config();
 const publicPath = path.resolve(__dirname, "public");
 const app = express();
@@ -246,8 +247,9 @@ app.post("/tabulado", function(req, res){
           httpOnly: true,
           secure: true
       }
-  ]
+  ];
   let navegador;
+  const ruta = `./tabulados/${req.body.codigo}.pdf`;
   (async ()=>{
       navegador = await chromium.launch();
       const context = await navegador.newContext();
@@ -262,7 +264,6 @@ app.post("/tabulado", function(req, res){
       await page.waitForLoadState();
       // const tabuladoImpreso = await page.content();
       // console.log(tabuladoImpreso);
-      const ruta = `./tabulados/${req.body.value}.pdf`
       ejemplo = await page.pdf({path: ruta})
       // console.log(ejemplo)
       const tabulado = await page.evaluate(obtenerTabulado);
@@ -273,10 +274,19 @@ app.post("/tabulado", function(req, res){
       res.download(ruta)
       // res.sendFile(ruta)
       // res.send(tabulado)
+
+      
       await page.close();
   })()
   .catch((err) => res.sendStatus(500))
-  .finally(async()=> navegador.close());
+  .finally(async()=>{
+    navegador.close();
+    try {
+      await fs.unlink(ruta)
+    } catch(err) {
+      console.error('No se puedo eliminar el tabulado', err)
+    }
+  } );
 });
 
 app.post("/calificaciones", function(req, res){
