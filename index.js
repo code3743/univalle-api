@@ -260,11 +260,19 @@ app.post("/tabulado", function(req, res){
       });
       await page.click('input[title="Consultar Tabulado"]');
       await page.waitForLoadState();
-      const tabuladoImpreso = await page.content();
-      console.log(tabuladoImpreso);
-      await page.pdf({path: '/tabulados/tabulado'})
+      // const tabuladoImpreso = await page.content();
+      // console.log(tabuladoImpreso);
+      const ruta = `./tabulados/${req.body.value}.pdf`
+      ejemplo = await page.pdf({path: ruta})
+      // console.log(ejemplo)
       const tabulado = await page.evaluate(obtenerTabulado);
-      res.send(tabulado)
+      // var data = fs.readFileSync('t.pdf');
+      // console.log(data)
+      // res.contentType("application/pdf");
+      // res.send(data);
+      res.download(ruta)
+      // res.sendFile(ruta)
+      // res.send(tabulado)
       await page.close();
   })()
   .catch((err) => res.sendStatus(500))
@@ -409,7 +417,7 @@ app.get("/restaurante", function(req,res){
       "https://vicebienestar.univalle.edu.co/restaurante-universitario"
     );
     await page.waitForLoadState();
-    await page.waitForTimeout(10000)
+    // await page.waitForTimeout(10000)
     const menuSemanal = await page.evaluate(()=>{
       const dias = document.querySelectorAll('.tabla-info>tbody>tr[style="height: 24px; background-color: #e4cccc;"]');
       const menuSemanal = new Array(5);
@@ -434,7 +442,6 @@ app.get("/restaurante", function(req,res){
         menuSemanal: menuSemanal
       }
     });
-    console.log('Desdepues de evaluar')
     await page.close()
     res.send(menuSemanal)
 })()
@@ -443,7 +450,6 @@ app.get("/restaurante", function(req,res){
 });
 
 app.get("/opac", function(req, res){
-
   let navegador;
   const codigo = req.query.codigo;
   (async ()=>{
@@ -457,7 +463,7 @@ app.get("/opac", function(req, res){
        
     })
     
-    await page.waitForTimeout(10000)
+    await page.waitForTimeout(5000)
     const evaluarUsuario = await page.evaluate(()=>{
         if(document.querySelector('#login1') == null){
             return true
@@ -547,7 +553,7 @@ app.get("/opac-actualizar-libro",function(req,res){
     await page.evaluate(()=>{
         document.querySelector('input[value=" Ingresar "]').click()
     })
-    await page.waitForTimeout(10000);
+    await page.waitForTimeout(5000)
 
     const actualizarLibro = await page.evaluate((index)=>{
       const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr')
@@ -577,7 +583,7 @@ app.get("/opac-actualizar-todo",function(req,res){
     await page.evaluate(()=>{
         document.querySelector('input[value=" Ingresar "]').click()
     })
-    await page.waitForTimeout(10000);
+    await page.waitForTimeout(5000)
 
     const actualizarTosoLosLibros = await page.evaluate(()=>{
       const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr');
