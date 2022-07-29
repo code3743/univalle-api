@@ -264,12 +264,8 @@ app.post("/tabulado", function(req, res){
       await page.waitForLoadState();
 
       ejemplo = await page.pdf({path: ruta})
-
       // const tabulado = await page.evaluate(obtenerTabulado);
-
       res.download(ruta)
-
-      
       await page.close();
   })()
   .catch((err) => res.sendStatus(500))
@@ -412,7 +408,7 @@ app.get("/electivas", function (req, res) {
     .finally(async () => await navegador.close());
 });
 
-app.get("/restaurante", function(req,res){
+app.get("/menu-restaurante", function(req,res){
   let navegador;
   (async () => {
     navegador = await chromium.launch();
@@ -574,6 +570,39 @@ app.get("/opac-actualizar-libro",function(req,res){
   .finally(async() => await navegador.close());
 });
 
+app.post("/restaurante", function(req, res){
+  const codigo = req.body.codigo;
+  const clave = req.body.clave;
+  let navegador;
+  (async()=>{
+    navegador = await chromium.launch();
+    const page = await navegador.newPage();
+    await page.goto("https://restauranteuniversitario.univalle.edu.co/restaurante.php/login");
+    await page.waitForLoadState();
+    await page.fill('#signin_username', codigo);
+    await page.fill('#signin_password',clave);
+    await page.click('input[value="Ingresar"]');
+    await page.waitForLoadState();
+    await page.evaluate(()=>{
+    document.querySelector('.container-fluid>.navbar-collapse>#udf-menu-principal').querySelectorAll('li>a')[1].click();
+    });
+    await page.waitForLoadState();
+    const informacion = await page.evaluate(()=>{
+      const estamento = document.querySelectorAll('.form-control.input-sm.disabled')[5].innerText;
+      const tiquetes = document.querySelectorAll('.form-control.input-sm.disabled')[7].innerText
+
+      return {
+        estamento,
+        tiquetes
+      }
+    });
+    await page.close()
+    res.send(informacion);
+  })(
+  )
+    .catch(err => res.sendStatus(500))
+    .finally(async()=> navegador.close());
+});
 
 app.get("/opac-actualizar-todo",function(req,res){
   let navegador;
