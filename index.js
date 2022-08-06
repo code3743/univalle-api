@@ -1,5 +1,5 @@
 const express = require("express");
-const { chromium } = require("playwright");
+const { chromium } = require("playwright-chromium");
 const path = require("path");
 const fs = require('fs').promises;
 require("dotenv").config();
@@ -202,7 +202,7 @@ app.post("/sira", function (req, res) {
   const clave = req.body.clave;
   let navegador;
   (async ()=>{
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const context = await navegador.newContext();
     const page = await context.newPage();
     await page.goto("https://sira.univalle.edu.co/sra/");
@@ -251,7 +251,7 @@ app.post("/tabulado", function(req, res){
   let navegador;
   const ruta = `./tabulados/${req.body.codigo}.pdf`;
   (async ()=>{
-      navegador = await chromium.launch();
+      navegador = await chromium.launch({ chromiumSandbox: false });
       const context = await navegador.newContext();
       await context.addCookies(reanudarSession);
       const page = await context.newPage();
@@ -294,7 +294,7 @@ app.post("/calificaciones", function(req, res){
   ]
   let navegador;
   (async ()=>{
-      navegador = await chromium.launch();
+      navegador = await chromium.launch({ chromiumSandbox: false });
       const context = await navegador.newContext();
       await context.addCookies(reanudarSession);
       const page = await context.newPage();
@@ -318,7 +318,7 @@ app.get("/desplegar-informacion", function(req, res){
   const url = `https://sira1.univalle.edu.co/sra/paquetes/programacionacademica/index_publico.php?accion=desplegarFormularioConsultarProgramacion&sed_codigo=${sede}&facultad=${facultad}`
   let navegador;
   (async () =>{
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto(url);
     await page.waitForLoadState();
@@ -369,7 +369,7 @@ app.get("/consulta-programacion", function(req, res){
   const url = `https://sira1.univalle.edu.co/sra/paquetes/programacionacademica/index_publico.php?accion=desplegarFormularioConsultarProgramacion&sed_codigo=${sede}&facultad=${facultad}`
   let navegador;
   (async () =>{
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto(url);
     await page.waitForLoadState();
@@ -392,7 +392,7 @@ app.get("/electivas", function (req, res) {
   const sede = req.query.sede;
   let navegador;
   (async () => {
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto(
       "https://sira.univalle.edu.co/sra/paquetes/programacionacademica/index_publico.php?accion=reporteDeProgramacionAcademicaEC"
@@ -411,7 +411,7 @@ app.get("/electivas", function (req, res) {
 app.get("/menu-restaurante", function(req,res){
   let navegador;
   (async () => {
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto(
       "https://vicebienestar.univalle.edu.co/restaurante-universitario"
@@ -453,7 +453,7 @@ app.get("/opac", function(req, res){
   let navegador;
   const codigo = req.query.codigo;
   (async ()=>{
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto("https://opac.univalle.edu.co/cgi-olib/");
     await page.waitForLoadState();
@@ -545,7 +545,7 @@ app.get("/opac-actualizar-libro",function(req,res){
   const codigo = req.query.codigo;
   const libro = parseInt(req.query.libro);
   (async ()=>{
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto("https://opac.univalle.edu.co/cgi-olib/");
     await page.waitForLoadState();
@@ -575,7 +575,7 @@ app.post("/restaurante", function(req, res){
   const clave = req.body.clave;
   let navegador;
   (async()=>{
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto("https://restauranteuniversitario.univalle.edu.co/restaurante.php/login");
     await page.waitForLoadState();
@@ -608,7 +608,7 @@ app.get("/opac-actualizar-todo",function(req,res){
   let navegador;
   const codigo = req.query.codigo;
   (async ()=>{
-    navegador = await chromium.launch();
+    navegador = await chromium.launch({ chromiumSandbox: false });
     const page = await navegador.newPage();
     await page.goto("https://opac.univalle.edu.co/cgi-olib/");
     await page.waitForLoadState();
