@@ -120,7 +120,7 @@ const consultarInformacion =  async (req = request, res = response)=>{
           document.querySelector('form').setAttribute('target','_self');
           document.querySelectorAll('input[value="Consultar Programación Académica"]')[i].setAttribute("id",i)
         },consulta);
-        await page.selectOption(detalle,value);
+        await page.selectOption(detalle,parametro);
         await page.click(`input[id="${consulta}"]`);
         await page.waitForLoadState();
         const ofertas = await page.evaluate(obtenerAsignaturasOferta);
