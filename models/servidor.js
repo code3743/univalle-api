@@ -1,4 +1,4 @@
-const path = require("path");
+
 const express = require('express');
 const cors = require('cors');
 
@@ -12,14 +12,14 @@ class Servidor{
         this.rutaRestaurante = '/api/restaurante';
         this.rutaSistemaOPAC = '/api/opac';
         this.rutaProgramacionAcademica = '/api/programacion';
-        this.publicPath = path.resolve(__dirname, "public");
+       
         this.middelwares();
 
         this.routes();
 
     }
     middelwares(){
-       this.app.use(express.static(this.publicPath));
+       this.app.use(express.static('public'));
        this.app.use(express.json());
        this.app.use(cors());
     }
