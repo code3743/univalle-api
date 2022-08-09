@@ -1,16 +1,23 @@
 {
-  "name": "sira",
+  "name": "univalle-api",
   "version": "1.0.0",
-  "description": "Api no oficial del sistema SIRA de la Universidad del Valle",
+  "description": "API que reune todos lod sistemas transversales de la Universidad del Valle",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "start:dev": "nodemon index.js"
   },
-  "author": "Jota Lopez",
+  "keywords": [
+    "API",
+    "Univalle",
+    "SIRA",
+    "OPAC"
+  ],
+  "author": "Jota López",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "playwright-chromium": "^1.24.2"
