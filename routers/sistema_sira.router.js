@@ -7,7 +7,7 @@ const router = Router();
 
 router.post('/', getInformacionSIRA);
 router.get('/tabulado',getTabulado);
-router.get('/calificaiones', getCalificaiones)
+router.get('/calificaciones', getCalificaiones)
 
 
 module.exports = router;
