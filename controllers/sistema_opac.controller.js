@@ -21,14 +21,18 @@ const getInformacionPrimariaOPAC = async (req = request, res = response)=>{
     });
     await page.waitForTimeout(10000);
     if(!evaluarUsuario) {
-        return  res.json({
-            fechaExpiracion: '',
-            multa: '',
-            librosPrestados:[],
-            historialPrestamos:[] });
+        return  res.status(400).json({
+            error: 'El usuario no existe',
+            });
     }
       const fechaExpiracion = await page.evaluate(()=>{
           return document.querySelector('#user_expdate_text').innerText;
+      });
+      const apellido = await page.evaluate(()=>{
+        return document.querySelector('#user_sname_text').innerText;
+      });
+      const nombre = await page.evaluate(()=>{
+        return document.querySelector('#user_fname_text').innerText;
       });
       const multa = await page.evaluate(()=>{
           return document.querySelector('#user_CURBAL_text').innerText;
@@ -78,10 +82,12 @@ const getInformacionPrimariaOPAC = async (req = request, res = response)=>{
       await navegador.close();
 
       res.json({
-          fechaExpiracion,
-          multa,
-          librosPrestados,
-          historialPrestamos 
+            nombre,
+            apellido,
+            fechaExpiracion,
+            multa,
+            librosPrestados,
+            historialPrestamos 
          });
     
   
