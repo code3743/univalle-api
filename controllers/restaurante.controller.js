@@ -7,21 +7,26 @@ const getMenuSemana = async (req = request, res = response)=>{
         const page = await navegador.newPage();
         await page.goto("https://vicebienestar.univalle.edu.co/restaurante-universitario");
         await page.waitForLoadState();
+      
         const menuSemanal = await page.evaluate(()=>{
             const dias = document.querySelectorAll('.tabla-info>tbody>tr[style="height: 24px; background-color: #e4cccc;"]');
             const menuSemanal = new Array(5);
             const menuDelDia = new Array(7);
             for(let i=0; i<dias.length; i++){
               let dia = dias[i].querySelectorAll('td');
-              if(dia.length > 2){
-                for(let j=0; j<dia.length; j++){
-                  menuDelDia[j] = dia[j].innerText;
+                if (!(dia.length < 3)){
+                  for(let j=0; j<dia.length; j++){
+
+                    menuDelDia[j] = dia[j].innerText;
+                  }
+                }else {
+                  for(let j=0; j<7; j++){
+
+                    menuDelDia[j] = 'Sin servicio';
+                  }
                 }
-              }else{
-                for(let j = 0; j<7; i++){
-                  menuDelDia[j] =  "Sin servicio"
-                }
-              }
+              
+              
               menuSemanal[i] = {
                 dia: menuDelDia[0],
                 sopa: menuDelDia[1],
