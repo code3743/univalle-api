@@ -13,8 +13,14 @@ const getMenuSemana = async (req = request, res = response)=>{
             const menuDelDia = new Array(7);
             for(let i=0; i<dias.length; i++){
               let dia = dias[i].querySelectorAll('td');
-              for(let j=0; j<dia.length; j++){
-                menuDelDia[j] = dia[j].innerText;
+              if(dia.length > 2){
+                for(let j=0; j<dia.length; j++){
+                  menuDelDia[j] = dia[j].innerText;
+                }
+              }else{
+                for(let j = 0; j<7; i++){
+                  menuDelDia[j] =  "Sin servicio"
+                }
               }
               menuSemanal[i] = {
                 dia: menuDelDia[0],

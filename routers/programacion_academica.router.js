@@ -1,10 +1,11 @@
 const {Router } = require('express');
-const { desplegarInformacion, consultarInformacion, getElectivas } = require('../controllers/programacion_academica.controller');
+const { desplegarInformacion, consultarInformacion, getElectivas, getInformacionIncial } = require('../controllers/programacion_academica.controller');
 
 const router = Router();
 
-router.get('/', desplegarInformacion);
-router.get('/consultar', consultarInformacion);
-router.get('/electivas', getElectivas);
+router.get('/', getInformacionIncial);
+router.get('/:sede/:facultad', desplegarInformacion);
+router.get('/:sede/:facultad/:parametro', consultarInformacion);
+router.get('/:sede', getElectivas);
 
 module.exports = router;

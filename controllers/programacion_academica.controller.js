@@ -65,8 +65,113 @@ const obtenerAsignaturasOferta = () =>{
       } else return {estatus: false, asignatura: []};
   };
 
+
+const getInformacionIncial =  (req = request, res = response)=>{
+
+  const sedes = [
+    {
+       value: "00",
+       nombre: "CALI"
+    },
+    {
+        value: "01",
+        nombre: "BUGA"
+    },
+    {
+        value: "02",
+        nombre: "CAICEDONIA"
+    },
+    {
+        value: "03",
+        nombre: "CARTAGO"
+    },
+    {
+        value: "04",
+        nombre: "PACIFICO"
+    },
+    {
+        value: "05",
+        nombre: "PALMIRA"
+    },
+    {
+        value: "06",
+        nombre: "TULUA"
+    },
+    {
+        value: "07",
+        nombre: "ZARZAL"
+    },
+    {
+        value: "14",
+        nombre: "YUMBO"
+    },
+    {
+        value: "21",
+        nombre: "NORTE DEL CAUCA"
+    }
+];
+
+const facultades = [
+  {
+    value: "1",
+    nombre: "CIENCIAS NATURALES Y EXACTAS"
+  },
+  {
+    value: "2",
+    nombre: "HUMANIDADES"
+  },
+  {
+    value: "3",
+    nombre: "CIENCIAS SOCIALES Y ECONÓMICAS"
+  },
+  {
+    value: "4",
+    nombre: "EDUCACIÓN Y PEDAGOGÍA"
+  },
+  {
+    value: "4A",
+    nombre: "PSICOLOGÍA"
+  },
+  {
+    value: "5",
+    nombre: "ARTES INTEGRADAS"
+  },
+  {
+    value: "6",
+    nombre: "SALUD"
+  },
+  {
+    value: "7",
+    nombre: "INGENIERÍA"
+  },
+  {
+    value: "8",
+    nombre: "CIENCIAS DE LA ADMINISTRACIÓN"
+  },
+  {
+    value: "9",
+    nombre: "OTRAS FACULTADES"
+  },
+  {
+    value: "9A",
+    nombre: "DIRECCIÓN DE REGIONALIZACIÓN"
+  },
+  {
+    value: "9B",
+    nombre: "DIRECCIÓN PLAN DE NIVELACIÓN TALENTOS PILOS"
+  }
+];
+
+  res.json(
+    {
+      sedes,
+      facultades
+    }
+  );
+}
+
 const desplegarInformacion = async (req = request, res = response)=>{
-    const {sede, facultad } = req.query;
+    const {sede, facultad } = req.params;
     const url = `https://sira1.univalle.edu.co/sra/paquetes/programacionacademica/index_publico.php?accion=desplegarFormularioConsultarProgramacion&sed_codigo=${sede}&facultad=${facultad}`
     try {
         const navegador = await chromium.launch({ chromiumSandbox: false });
@@ -108,7 +213,8 @@ const desplegarInformacion = async (req = request, res = response)=>{
 }
 
 const consultarInformacion =  async (req = request, res = response)=>{
-    const { sede, facultad, tipoConsulta, parametro} = res.query;
+    const { sede, facultad, parametro} = req.params;
+    const {tipoConsulta} = req.query;
     const consulta = parseInt(tipoConsulta) == 1 ? 'select[name="una_codigo"]': 'select[name="pra_codigo"]';
     const url = `https://sira1.univalle.edu.co/sra/paquetes/programacionacademica/index_publico.php?accion=desplegarFormularioConsultarProgramacion&sed_codigo=${sede}&facultad=${facultad}`
     try {
@@ -119,9 +225,9 @@ const consultarInformacion =  async (req = request, res = response)=>{
         await page.evaluate((i)=>{
           document.querySelector('form').setAttribute('target','_self');
           document.querySelectorAll('input[value="Consultar Programación Académica"]')[i].setAttribute("id",i)
-        },consulta);
-        await page.selectOption(detalle,parametro);
-        await page.click(`input[id="${consulta}"]`);
+        },parseInt(tipoConsulta));
+        await page.selectOption(consulta,parametro);
+        await page.click(`input[id="${tipoConsulta}"]`);
         await page.waitForLoadState();
         const ofertas = await page.evaluate(obtenerAsignaturasOferta);
         res.json(ofertas);
@@ -132,7 +238,7 @@ const consultarInformacion =  async (req = request, res = response)=>{
 }
 
 const getElectivas = async (req = request, res = response)=>{
-    const sede = req.query.sede;
+    const {sede} = req.params;
     try {
         const navegador = await chromium.launch({ chromiumSandbox: false });
         const page = await navegador.newPage();
@@ -154,5 +260,6 @@ const getElectivas = async (req = request, res = response)=>{
 module.exports = {
     desplegarInformacion,
     consultarInformacion,
-    getElectivas
+    getElectivas,
+    getInformacionIncial
 }
