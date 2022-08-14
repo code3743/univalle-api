@@ -19,7 +19,7 @@ const getInformacionPrimariaOPAC = async (req = request, res = response)=>{
             return true;
         }else return false;
     });
-    await page.waitForTimeout(10000);
+   
     if(!evaluarUsuario) {
         return  res.status(400).json({
             error: 'El usuario no existe',
@@ -98,7 +98,7 @@ const getInformacionPrimariaOPAC = async (req = request, res = response)=>{
 
 const actualizarLibro = async (req = request, res = response)=>{
     const codigo = req.query.codigo;
-    const libro = parseInt(req.query.libro);
+    const libro = parseInt(req.params.index);
     try{
         const navegador = await chromium.launch({ chromiumSandbox: false });
         const page = await navegador.newPage();
@@ -106,9 +106,9 @@ const actualizarLibro = async (req = request, res = response)=>{
         await page.waitForLoadState();
         await page.fill('input[id="login1"]', codigo)
         await page.evaluate(()=>{
-            document.querySelector('input[value=" Ingresar "]').click()
+            document.querySelector('input[value=" Ingresar "]').click();
         })
-        await page.waitForTimeout(5000)
+        await page.waitForTimeout(5000);
     
         const actualizarLibro = await page.evaluate((index)=>{
           const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr')
@@ -135,9 +135,9 @@ const actualizarTodo = async (req = request, res = response)=>{
         await page.waitForLoadState();
         await page.fill('input[id="login1"]', codigo)
         await page.evaluate(()=>{
-            document.querySelector('input[value=" Ingresar "]').click()
+            document.querySelector('input[value=" Ingresar "]').click();
         })
-        await page.waitForTimeout(5000)
+        await page.waitForTimeout(5000);
     
         const actualizarLosLibros = await page.evaluate(()=>{
             const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr');

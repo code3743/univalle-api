@@ -4,8 +4,8 @@ const { getInformacionPrimariaOPAC, actualizarLibro, actualizarTodo } = require(
 const router = Router();
 
 router.get('/', getInformacionPrimariaOPAC);
-router.get('/actualizar', actualizarLibro);
-router.get('/actualizar-todo',actualizarTodo)
+router.get('/actualizar/:index', actualizarLibro);
+router.get('/actualizar',actualizarTodo)
 
 
 module.exports = router;
