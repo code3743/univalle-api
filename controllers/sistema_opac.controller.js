@@ -110,12 +110,16 @@ const actualizarLibro = async (req = request, res = response)=>{
         })
         await page.waitForTimeout(5000);
     
-        const actualizarLibro = await page.evaluate((index)=>{
+        await page.evaluate((index)=>{
           const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr')
           libros[index].querySelectorAll('td')[5].querySelector('span>img').click() ;
-          return libros[index].querySelectorAll('td')[5].textContent;
+          return libros[index].querySelectorAll('td')[5].innerText;
         }, libro);
-    
+        await page.waitForTimeout(2000);
+        const actualizarLibro = await page.evaluate((index)=>{
+            const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr')
+            return libros[index].querySelectorAll('td')[5].innerText;
+          }, libro);
         await page.close();
         res.json({
           estado: actualizarLibro
@@ -139,15 +143,19 @@ const actualizarTodo = async (req = request, res = response)=>{
         })
         await page.waitForTimeout(5000);
     
+        await page.evaluate(()=>{
+            document.querySelector('img[title="Renovar todos los artículos"]').click();
+          });
+
+        await page.waitForTimeout(2000);
         const actualizarLosLibros = await page.evaluate(()=>{
             const libros = document.querySelector('.details_tab_copy').querySelectorAll('table>tbody>tr');
-            document.querySelector('img[title="Renovar todos los artículos"]').click()
             const estados = new Array(libros.length - 1);
             for(let i=0; i<libros.length - 1; i++){
-                estados[i] = libros[index + 1].querySelectorAll('td')[5].textContent
+                estados[i] = libros[i + 1].querySelectorAll('td')[5].innerText
             }
            return estados
-          });
+        });
         await page.close();
         res.json({
           estado: actualizarLosLibros
