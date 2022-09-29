@@ -3,7 +3,8 @@ Este proyecto pretende crear una API de los sistemas requeridos por la comunidad
 de la Universidad del Valle
 
 ## Importante 🎈
-Para instalar ejecuta el comando **npm install**
+Para instalar ejecuta el comando 
+    ``` npm install ```
 
 ### Requisitos
 - Nodejs >= 14
