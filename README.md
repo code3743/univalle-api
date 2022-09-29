@@ -4,3 +4,6 @@ de la Universidad del Valle
 
 ## Importante 🎈
 Para instalar ejecuta el comando **npm install**
+
+### Requisitos
+- Nodejs >= 14
