@@ -32,7 +32,6 @@
   ],
   "author": "code3743",
   "license": "MIT",
-  "packageManager": "pnpm@10.33.0",
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "axios": "^1.20.0",
@@ -66,11 +65,5 @@
     "tsx": "^4.23.13",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.70.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "prisma"
-    ]
   }
 }

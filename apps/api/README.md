@@ -1,5 +1,7 @@
 # Univalle API
 
+> Parte del monorepo [univalle-platform](../../README.md). Este README cubre solo `apps/api`.
+
 Backend REST que alimenta a [Univalle App](https://github.com/code3743/univalle_app): configuración remota, feature flags de versión, módulos habilitados, banner de bienvenida y novedades administradas.
 
 > Las noticias scrapeadas de la agencia de la universidad están **deshabilitadas por ahora**: no existe router ni controller público/admin para ellas (ver [Scraping de noticias](#scraping-de-noticias-deshabilitado)).
@@ -111,24 +113,28 @@ Ver `.env.example`. Validadas al arrancar con Zod (`src/config/env.ts`); el proc
 
 ## Desarrollo local
 
+Desde la raíz del monorepo (`pnpm install` instala las dependencias de todos los `apps/*`):
+
 ```bash
 pnpm install
 
 # Levanta PostgreSQL en Docker (puerto 5433)
-pnpm db:up
+pnpm --filter univalle-api db:up
 
 # Copia y ajusta las variables de entorno
-cp .env.example .env
+cp apps/api/.env.example apps/api/.env
 
 # Aplica migraciones y genera el cliente de Prisma
-pnpm prisma:migrate
+pnpm --filter univalle-api prisma:migrate
 
 # Crea el admin inicial y datos base
-pnpm prisma:seed
+pnpm --filter univalle-api prisma:seed
 
 # Servidor en modo watch (tsx)
-pnpm dev
+pnpm dev:api
 ```
+
+O bien, parado dentro de `apps/api`, los mismos scripts sin el prefijo `--filter univalle-api`.
 
 ### Scripts disponibles
 
@@ -154,6 +160,7 @@ El `Dockerfile` usa un build multi-stage (`node:22-alpine` + pnpm vía Corepack)
 Al arrancar el contenedor se corre `npx prisma migrate deploy` antes de levantar el servidor (`CMD`), aplicando migraciones pendientes automáticamente. Expone el puerto `3000`.
 
 ```bash
+cd apps/api
 docker build -t univalle-api .
 docker run --env-file .env -p 3000:3000 univalle-api
 ```

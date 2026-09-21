@@ -10,13 +10,13 @@ adminConfigRouter.use(requireAdmin);
  * @openapi
  * /admin/config:
  *   get:
- *     summary: Obtener configuracion de mantenimiento y bienvenida
+ *     summary: Obtener configuracion de mantenimiento
  *     tags: [Admin - Config]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Configuracion actual
+ *         description: Configuracion de mantenimiento actual (expuesta en /app/config)
  */
 adminConfigRouter.get("/", adminConfigController.get);
 
@@ -24,7 +24,7 @@ adminConfigRouter.get("/", adminConfigController.get);
  * @openapi
  * /admin/config:
  *   patch:
- *     summary: Actualizar configuracion de mantenimiento y bienvenida
+ *     summary: Actualizar configuracion de mantenimiento
  *     tags: [Admin - Config]
  *     security:
  *       - bearerAuth: []

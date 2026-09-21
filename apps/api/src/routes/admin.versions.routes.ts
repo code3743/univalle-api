@@ -16,7 +16,7 @@ adminVersionsRouter.use(requireAdmin);
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de versiones
+ *         description: Lista de versiones (estos valores alimentan el bloque "update" de /app/config)
  */
 adminVersionsRouter.get("/", adminVersionsController.list);
 
@@ -56,6 +56,6 @@ adminVersionsRouter.get("/", adminVersionsController.list);
  *                 description: Si la plataforma esta habilitada para uso (ej. false mientras no se lanza iOS)
  *     responses:
  *       200:
- *         description: Version creada o actualizada
+ *         description: Version creada o actualizada (se refleja en /app/config para esa plataforma)
  */
 adminVersionsRouter.put("/:platform", adminVersionsController.upsert);
