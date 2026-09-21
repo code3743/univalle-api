@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Platform {
+  IOS
+  ANDROID
+}
+
+model AppConfig {
+  id                 Int      @id @default(1)
+  maintenanceEnabled Boolean  @default(false)
+  maintenanceTitle   String   @default("")
+  maintenanceMessage String   @default("")
+  updatedAt          DateTime @updatedAt
+
+  @@map("app_config")
+}
+
+model WelcomeBanner {
+  id          Int      @id @default(1)
+  enabled     Boolean  @default(false)
+  title       String   @default("")
+  description String   @default("")
+  imageUrl    String?
+  linkUrl     String?
+  updatedAt   DateTime @updatedAt
+
+  @@map("welcome_banner")
+}
+
+model PlatformVersion {
+  id                 Int      @id @default(autoincrement())
+  platform           Platform @unique
+  enabled            Boolean  @default(true)
+  latestVersion      String
+  minRequiredVersion String
+  storeUrl           String
+  updateMessage      String   @default("")
+  updatedAt          DateTime @updatedAt
+
+  @@map("platform_versions")
+}
+
+model AppModule {
+  key              String  @id
+  label            String
+  icon             String
+  route            String
+  color            String  @default("#FF0000")
+  description      String?
+  enabledIos       Boolean @default(true)
+  enabledAndroid   Boolean @default(true)
+  quickAccessOrder Int?
+  sortOrder        Int     @default(0)
+
+  @@map("app_modules")
+}
+
+model Announcement {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([active, sortOrder])
+  @@map("announcements")
+}
+
+model NewsItem {
+  id           Int      @id @default(autoincrement())
+  title        String
+  summary      String
+  imageUrl     String?
+  sourceUrl    String   @unique
+  category     String?
+  categorySlug String?
+  hidden       Boolean  @default(false)
+  sourceOrder  Int      @default(0)
+  scrapedAt    DateTime @default(now())
+
+  @@index([hidden, sourceOrder])
+  @@index([hidden, categorySlug, sourceOrder])
+  @@map("news_items")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@map("admin_users")
+}
