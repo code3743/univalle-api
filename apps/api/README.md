@@ -152,15 +152,17 @@ O bien, parado dentro de `apps/api`, los mismos scripts sin el prefijo `--filter
 
 ## Despliegue
 
-El `Dockerfile` usa un build multi-stage (`node:22-alpine` + pnpm vía Corepack):
+El `Dockerfile` usa un build multi-stage (`node:22-alpine` + pnpm vía Corepack) y **espera que el build context sea la raíz del monorepo**, no `apps/api` (necesita `pnpm-workspace.yaml` y el lockfile raíz para instalar con `pnpm --filter univalle-api`):
 
-1. **builder**: instala dependencias completas, copia `src`/`prisma` y compila con `pnpm build`.
-2. **runner**: instala solo dependencias de producción y copia el `dist/` compilado.
+1. **builder**: instala solo las dependencias de `univalle-api` (`pnpm install --filter univalle-api`), genera el cliente de Prisma y compila con `tsc`.
+2. **runner**: instala solo dependencias de producción del mismo filtro y copia el `dist/` compilado.
 
 Al arrancar el contenedor se corre `npx prisma migrate deploy` antes de levantar el servidor (`CMD`), aplicando migraciones pendientes automáticamente. Expone el puerto `3000`.
 
 ```bash
-cd apps/api
-docker build -t univalle-api .
-docker run --env-file .env -p 3000:3000 univalle-api
+# desde la raíz del monorepo
+docker build -f apps/api/Dockerfile -t univalle-api .
+docker run --env-file apps/api/.env -p 3000:3000 univalle-api
 ```
+
+En Coolify (o cualquier plataforma que permita elegir build context + ruta del Dockerfile): **Base Directory** = `/` (raíz del repo), **Dockerfile Location** = `apps/api/Dockerfile`.

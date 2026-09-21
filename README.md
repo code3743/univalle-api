@@ -7,7 +7,7 @@ Monorepo de la plataforma Univalle: API REST + panel de administración.
 | App | Descripción | README |
 |---|---|---|
 | [`apps/api`](apps/api/README.md) | Backend REST (Express + Prisma + PostgreSQL) que alimenta a [Univalle App](https://github.com/code3743/univalle_app) | [apps/api/README.md](apps/api/README.md) |
-| `apps/admin` | Panel de administración (Vite + React + TypeScript + Tailwind + shadcn/ui) para gestionar módulos, configuración, versiones, anuncios y bienvenida | — |
+| [`apps/admin`](apps/admin/README.md) | Panel de administración (Vite + React + TypeScript + Tailwind + shadcn/ui) para gestionar módulos, configuración, versiones, anuncios y bienvenida | [apps/admin/README.md](apps/admin/README.md) |
 
 ## Requisitos
 
