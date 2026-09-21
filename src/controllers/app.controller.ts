@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { listAnnouncements } from "../services/announcements.service.js";
 import { getAppConfig } from "../services/config.service.js";
+import { listPublicModules } from "../services/modules.service.js";
 import { getRawWelcome } from "../services/welcome.service.js";
 
 const platformParamSchema = z.enum(["ios", "android"]);
@@ -9,6 +10,10 @@ const platformParamSchema = z.enum(["ios", "android"]);
 const appConfigQuerySchema = z.object({
   platform: platformParamSchema,
   version: z.string().optional(),
+});
+
+const modulesQuerySchema = z.object({
+  platform: platformParamSchema,
 });
 
 const announcementsQuerySchema = z.object({
@@ -27,6 +32,17 @@ export const appController = {
       const config = await getAppConfig(toPlatform(platform), version);
       res.set("Cache-Control", "no-cache");
       res.json(config);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async getModules(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { platform } = modulesQuerySchema.parse(req.query);
+      const { items, quickAccess } = await listPublicModules(toPlatform(platform));
+      res.set("Cache-Control", "no-cache");
+      res.json({ items, quickAccess });
     } catch (err) {
       next(err);
     }

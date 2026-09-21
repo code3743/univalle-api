@@ -52,6 +52,7 @@ model AppModule {
   label            String
   icon             String
   route            String
+  color            String  @default("#FF0000")
   description      String?
   enabledIos       Boolean @default(true)
   enabledAndroid   Boolean @default(true)

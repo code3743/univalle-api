@@ -34,7 +34,7 @@ adminModulesRouter.get("/", adminModulesController.list);
  *         application/json:
  *           schema:
  *             type: object
- *             required: [key, label, icon, route]
+ *             required: [key, label, icon, route, color]
  *             properties:
  *               key:
  *                 type: string
@@ -44,6 +44,9 @@ adminModulesRouter.get("/", adminModulesController.list);
  *                 type: string
  *               route:
  *                 type: string
+ *               color:
+ *                 type: string
+ *                 description: Color de acento en formato hex #RRGGBB
  *               description:
  *                 type: string
  *               enabledIos:

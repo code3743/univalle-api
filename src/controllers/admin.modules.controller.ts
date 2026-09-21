@@ -9,11 +9,16 @@ import {
 
 const keyParamSchema = z.string().min(1);
 
+const hexColorSchema = z
+  .string()
+  .regex(/^#[0-9A-Fa-f]{6}$/, "color must be a #RRGGBB hex string");
+
 const createModuleSchema = z.object({
   key: z.string().min(1),
   label: z.string().min(1),
   icon: z.string().min(1),
   route: z.string().min(1),
+  color: hexColorSchema,
   description: z.string().optional(),
   enabledIos: z.boolean().optional(),
   enabledAndroid: z.boolean().optional(),
