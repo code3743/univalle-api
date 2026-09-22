@@ -1,0 +1,106 @@
+---
+import Layout from "../layouts/Layout.astro";
+import StoreBadges from "../components/StoreBadges.astro";
+
+const funcionalidades = [
+  { nombre: "Calificaciones y promedio", estado: "Disponible" },
+  { nombre: "Tabulado de materias", estado: "Disponible" },
+  { nombre: "Horario de clases", estado: "Disponible" },
+  { nombre: "Currículo / plan de estudios", estado: "Disponible" },
+  { nombre: "Carné estudiantil digital", estado: "Disponible" },
+  { nombre: "Evaluación docente", estado: "Disponible" },
+  { nombre: "Noticias de la universidad", estado: "Disponible" },
+  { nombre: "Restaurante universitario", estado: "En desarrollo" },
+  { nombre: "Biblioteca", estado: "En desarrollo" },
+];
+---
+
+<Layout
+  title="Univalle App"
+  description="App móvil no oficial para estudiantes de la Universidad del Valle: notas, horario, tabulado, currículo, carné digital y más en un solo lugar."
+>
+  <section class="mx-auto max-w-5xl px-6 pt-20 pb-16 text-center">
+    
+    <h1 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
+      Todo tu día a día en Univalle,
+      <span class="text-brand"> en una sola app</span>
+    </h1>
+    <p class="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
+      Notas, horario, tabulado, currículo, carné digital, evaluación docente y
+      noticias de la Universidad del Valle, centralizados en una sola
+      interfaz, sin lidiar con SIRA ni con sus formularios.
+    </p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="https://github.com/code3743/univalle_app"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-md bg-brand px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-dark"
+      >
+        Ver el proyecto en GitHub
+      </a>
+      <a
+        href="/privacidad"
+        class="rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted"
+      >
+        Política de privacidad
+      </a>
+    </div>
+    <StoreBadges />
+  </section>
+
+  <section id="objetivo" class="border-t border-border bg-muted/40">
+    <div class="mx-auto max-w-5xl px-6 py-16">
+      <h2 class="text-2xl font-semibold">Objetivo</h2>
+      <p class="mt-4 max-w-3xl text-muted-foreground">
+        La Universidad del Valle expone sus servicios en sistemas separados
+        (SIRA, U-Planner, el restaurante universitario, la biblioteca OPAC,
+        evaluación docente, la Agencia de Noticias), cada uno con su propia
+        sesión y su propia forma de pedir la información. Univalle App nació
+        para centralizar todo eso en un solo lugar, con una experiencia
+        consistente, sin que tengas que entrar a cada sistema por separado.
+      </p>
+    </div>
+  </section>
+
+  <section id="funcionalidades" class="mx-auto max-w-5xl px-6 py-16">
+    <h2 class="text-2xl font-semibold">Funcionalidades</h2>
+    <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+      {
+        funcionalidades.map((f) => (
+          <li class="flex items-center justify-between rounded-lg border border-border px-4 py-3 text-sm">
+            <span>{f.nombre}</span>
+            <span
+              class:list={[
+                "rounded-full px-2.5 py-0.5 text-xs font-medium",
+                f.estado === "Disponible"
+                  ? "bg-brand/10 text-brand-dark"
+                  : "bg-muted text-muted-foreground",
+              ]}
+            >
+              {f.estado}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="border-t border-border bg-muted/40">
+    <div class="mx-auto max-w-5xl px-6 py-16">
+      <h2 class="text-2xl font-semibold">Tus datos no pasan por nosotros</h2>
+      <p class="mt-4 max-w-3xl text-muted-foreground">
+        Univalle App no tiene un backend propio que guarde tus notas, tu
+        horario ni tus credenciales. La app se conecta directamente desde tu
+        celular a los sistemas de la universidad; nosotros nunca vemos, ni
+        almacenamos, ni compartimos esa información con nadie.
+      </p>
+      <a
+        href="/privacidad"
+        class="mt-5 inline-block text-sm font-medium text-brand hover:text-brand-dark"
+      >
+        Leer la política de privacidad completa →
+      </a>
+    </div>
+  </section>
+</Layout>

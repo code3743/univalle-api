@@ -1,0 +1,99 @@
+---
+import GooglePlayBadge from "../assets/badges/google-play-badge.png";
+import AppStoreBadge from "../assets/badges/app-store-badge.svg";
+
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? "http://localhost:3000/api";
+---
+
+<div id="store-cta" class="mt-4" data-api-url={apiUrl}>
+  <p id="store-fallback" class="text-xs text-muted-foreground">
+    Aún no está publicada en las tiendas de aplicaciones. Puedes compilarla
+    desde el código fuente mientras tanto.
+  </p>
+  <div
+    id="store-badges"
+    class="hidden flex-wrap items-center justify-center gap-4"
+  >
+    <a id="badge-android" href="#" target="_blank" rel="noopener noreferrer" class="hidden">
+      <img
+        src={GooglePlayBadge.src}
+        alt="Disponible en Google Play"
+        class="h-14 w-auto"
+      />
+    </a>
+    <a
+      id="badge-ios"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hidden py-2"
+    >
+      <img
+        src={AppStoreBadge.src}
+        alt="Descárgala en el App Store"
+        class="h-10 w-auto"
+      />
+    </a>
+  </div>
+</div>
+
+<script>
+  type StoreConfig = {
+    platformEnabled: boolean;
+    update: { storeUrl: string };
+  };
+
+  async function fetchPlatformConfig(
+    apiUrl: string,
+    platform: "android" | "ios",
+  ): Promise<StoreConfig | null> {
+    try {
+      const res = await fetch(
+        `${apiUrl}/app/config?platform=${platform}`,
+      );
+      if (!res.ok) return null;
+      return (await res.json()) as StoreConfig;
+    } catch {
+      return null;
+    }
+  }
+
+  function showBadge(id: string, storeUrl: string) {
+    const el = document.getElementById(id) as HTMLAnchorElement | null;
+    if (!el) return;
+    el.href = storeUrl;
+    el.classList.remove("hidden");
+    el.classList.add("inline-block");
+  }
+
+  async function init() {
+    const container = document.getElementById("store-cta");
+    if (!container) return;
+    const apiUrl = container.dataset.apiUrl ?? "http://localhost:3000/api";
+
+    const [android, ios] = await Promise.all([
+      fetchPlatformConfig(apiUrl, "android"),
+      fetchPlatformConfig(apiUrl, "ios"),
+    ]);
+
+    let anyEnabled = false;
+
+    if (android?.platformEnabled && android.update?.storeUrl) {
+      showBadge("badge-android", android.update.storeUrl);
+      anyEnabled = true;
+    }
+    if (ios?.platformEnabled && ios.update?.storeUrl) {
+      showBadge("badge-ios", ios.update.storeUrl);
+      anyEnabled = true;
+    }
+
+    if (anyEnabled) {
+      document.getElementById("store-fallback")?.classList.add("hidden");
+      const badges = document.getElementById("store-badges");
+      badges?.classList.remove("hidden");
+      badges?.classList.add("flex");
+    }
+  }
+
+  init();
+</script>

@@ -1,0 +1,25 @@
+---
+import Logo from "../assets/univalle-logo.svg";
+---
+
+<header class="border-b border-border">
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <a href="/" class="flex items-center gap-2 font-semibold">
+      <img src={Logo.src} alt="" width="28" height="28" />
+      <span>Univalle App</span>
+    </a>
+    <nav class="flex items-center gap-6 text-sm text-muted-foreground">
+      <a href="/#objetivo" class="hover:text-foreground">Objetivo</a>
+      <a href="/#funcionalidades" class="hover:text-foreground">Funcionalidades</a>
+      <a href="/privacidad" class="hover:text-foreground">Privacidad</a>
+      <a
+        href="https://github.com/code3743/univalle_app"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-md border border-border px-3 py-1.5 text-foreground hover:bg-muted"
+      >
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>

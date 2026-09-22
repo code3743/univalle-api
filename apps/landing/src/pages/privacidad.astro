@@ -1,0 +1,126 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const ultimaActualizacion = "21 de septiembre de 2026";
+---
+
+<Layout
+  title="Privacidad — Univalle App"
+  description="Política de privacidad y tratamiento de datos de Univalle App: qué información toca la app, dónde se guarda y por qué no la compartimos con nadie."
+>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-semibold tracking-tight">
+      Política de privacidad y tratamiento de datos
+    </h1>
+    <p class="mt-2 text-sm text-muted-foreground">
+      Última actualización: {ultimaActualizacion}
+    </p>
+
+    <p class="mt-8 text-muted-foreground">
+      Univalle App es un proyecto independiente, desarrollado y mantenido por
+      un estudiante, <strong>sin afiliación oficial con la Universidad del
+      Valle</strong>. Esta página explica en términos simples qué pasa con tu
+      información cuando usas la app, porque el resumen corto es: <strong
+        >no almacenamos ni compartimos tus datos académicos con nadie</strong
+      >.
+    </p>
+
+    <h2 class="mt-10 text-xl font-semibold">Cómo funciona la app</h2>
+    <p class="mt-3 text-muted-foreground">
+      Univalle App no tiene un backend propio que guarde tu información
+      académica. Cuando inicias sesión, la app abre una sesión directamente
+      contra los sistemas de la Universidad del Valle (SIRA, U-Planner, el
+      restaurante universitario, la biblioteca, evaluación docente), igual
+      que lo harías desde el navegador. La app solo traduce esa información a
+      una interfaz más simple; en ningún momento la envía a un servidor
+      nuestro.
+    </p>
+
+    <h2 class="mt-10 text-xl font-semibold">
+      Qué datos toca la app y dónde quedan
+    </h2>
+    <ul class="mt-3 list-disc space-y-2 pl-5 text-muted-foreground">
+      <li>
+        <strong>Tus credenciales de la universidad</strong> (usuario y
+        contraseña de SIRA) se guardan únicamente en el almacenamiento local
+        de tu celular, para poder mantener tu sesión y reautenticarte sin
+        pedírtelas cada vez. Nunca viajan a un servidor de Univalle App ni
+        quedan en nuestras manos.
+      </li>
+      <li>
+        <strong>Tus notas, horario, tabulado, currículo, carné y demás
+        información académica</strong> se piden en el momento a los sistemas
+        de la universidad y se muestran en la app. No los guardamos en
+        ningún servidor propio.
+      </li>
+      <li>
+        Todo el tráfico entre la app y los sistemas de la universidad viaja
+        cifrado (HTTPS).
+      </li>
+    </ul>
+
+    <h2 class="mt-10 text-xl font-semibold">
+      Qué guarda nuestro propio servidor
+    </h2>
+    <p class="mt-3 text-muted-foreground">
+      Univalle App sí usa un servidor propio, pero exclusivamente para
+      configuración general de la aplicación: qué módulos están habilitados,
+      la versión mínima requerida, anuncios y el banner de bienvenida. Ese
+      servidor <strong
+        >no tiene ni una sola tabla con datos personales o académicos de
+        estudiantes</strong
+      > — no sabe quién eres, ni qué notas tienes, ni con qué usuario entraste a
+      SIRA. Como cualquier servidor web, registra temporalmente logs técnicos
+      básicos (dirección IP, ruta solicitada) con fines de operación y
+      depuración, sin vincularlos a tu identidad.
+    </p>
+
+    <h2 class="mt-10 text-xl font-semibold">Con quién se comparte</h2>
+    <p class="mt-3 text-muted-foreground">
+      Con nadie más que con los propios sistemas de la Universidad del Valle,
+      porque son necesarios para autenticarte y traer tu información — es lo
+      mismo que pasaría si entraras directamente desde tu navegador.
+      Univalle App no vende, cede, ni comparte tus datos con terceros,
+      anunciantes ni servicios de analítica que identifiquen a personas.
+    </p>
+
+    <h2 class="mt-10 text-xl font-semibold">Tus derechos</h2>
+    <p class="mt-3 text-muted-foreground">
+      Como no almacenamos tu información académica ni tus credenciales en
+      ningún servidor, el ejercicio de tus derechos de acceso, corrección o
+      eliminación sobre esos datos corresponde a la Universidad del Valle,
+      responsable original de esa información. Puedes borrar en cualquier
+      momento lo que la app guardó localmente desinstalándola o cerrando
+      sesión desde su propio menú. Para cualquier duda, reclamo o solicitud
+      relacionada con el tratamiento de datos por parte de Univalle App,
+      puedes escribirnos y la atenderemos directamente.
+    </p>
+
+    <h2 class="mt-10 text-xl font-semibold">Cambios a esta política</h2>
+    <p class="mt-3 text-muted-foreground">
+      Si esta política cambia, lo vamos a reflejar en esta misma página con
+      la fecha de actualización correspondiente.
+    </p>
+
+    <h2 class="mt-10 text-xl font-semibold">Contacto</h2>
+    <p class="mt-3 text-muted-foreground">
+      ¿Preguntas sobre esta política o sobre el proyecto? Escríbenos a{" "}
+      <a
+        href="mailto:jotalopez.dev@gmail.com"
+        class="font-medium text-brand hover:text-brand-dark"
+      >
+        jotalopez.dev@gmail.com
+      </a>
+      o abre un issue en{" "}
+      <a
+        href="https://github.com/code3743/univalle_app"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-medium text-brand hover:text-brand-dark"
+      >
+        el repositorio del proyecto
+      </a>
+      .
+    </p>
+  </article>
+</Layout>

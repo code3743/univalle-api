@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+
+@theme inline {
+  --font-sans: "Geist Variable", sans-serif;
+
+  --color-brand: #ee322f;
+  --color-brand-dark: #c8231f;
+
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #6b6b6b;
+  --color-border: #e5e5e5;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
