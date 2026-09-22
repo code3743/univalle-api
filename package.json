@@ -2,14 +2,16 @@
   "name": "univalle-platform",
   "version": "1.0.0",
   "private": true,
-  "description": "Univalle platform monorepo: REST API + admin dashboard",
+  "description": "Univalle platform monorepo: REST API + admin dashboard + landing",
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev:api": "pnpm --filter univalle-api dev",
     "dev:admin": "pnpm --filter univalle-admin dev",
+    "dev:landing": "pnpm --filter univalle-landing dev",
     "build:api": "pnpm --filter univalle-api build",
     "build:admin": "pnpm --filter univalle-admin build",
+    "build:landing": "pnpm --filter univalle-landing build",
     "lint": "pnpm -r lint"
   },
   "author": "code3743",
