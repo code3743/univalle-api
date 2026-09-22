@@ -24,6 +24,7 @@ export interface ModuleFormSubmitValues {
   enabledIos: boolean
   enabledAndroid: boolean
   sortOrder: number
+  quickAccessOrder: number | null
 }
 
 interface ModuleFormDialogProps {
@@ -43,6 +44,7 @@ const emptyForm: ModuleFormSubmitValues = {
   enabledIos: true,
   enabledAndroid: true,
   sortOrder: 0,
+  quickAccessOrder: null,
 }
 
 export function ModuleFormDialog({ open, onOpenChange, module, onSubmit }: ModuleFormDialogProps) {
@@ -64,6 +66,7 @@ export function ModuleFormDialog({ open, onOpenChange, module, onSubmit }: Modul
               enabledIos: module.enabledIos,
               enabledAndroid: module.enabledAndroid,
               sortOrder: module.sortOrder,
+              quickAccessOrder: module.quickAccessOrder,
             }
           : emptyForm,
       )
@@ -167,6 +170,22 @@ export function ModuleFormDialog({ open, onOpenChange, module, onSubmit }: Modul
                   onChange={(e) => setValues((v) => ({ ...v, sortOrder: Number(e.target.value) }))}
                 />
               </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="quickAccessOrder">Orden de acceso rapido</Label>
+              <Input
+                id="quickAccessOrder"
+                type="number"
+                placeholder="Vacio = no aparece como atajo"
+                value={values.quickAccessOrder ?? ""}
+                onChange={(e) =>
+                  setValues((v) => ({
+                    ...v,
+                    quickAccessOrder: e.target.value === "" ? null : Number(e.target.value),
+                  }))
+                }
+              />
             </div>
 
             <div className="grid gap-2">

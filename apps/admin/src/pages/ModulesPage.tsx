@@ -113,20 +113,21 @@ export function ModulesPage() {
               <TableHead>Ruta</TableHead>
               <TableHead>Plataformas</TableHead>
               <TableHead>Orden</TableHead>
+              <TableHead>Acceso rapido</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground">
+                <TableCell colSpan={8} className="text-center text-muted-foreground">
                   Cargando...
                 </TableCell>
               </TableRow>
             )}
             {!isLoading && modules.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground">
+                <TableCell colSpan={8} className="text-center text-muted-foreground">
                   No hay modulos registrados.
                 </TableCell>
               </TableRow>
@@ -148,6 +149,7 @@ export function ModulesPage() {
                   {module.enabledAndroid && <Badge variant="secondary">Android</Badge>}
                 </TableCell>
                 <TableCell>{module.sortOrder}</TableCell>
+                <TableCell>{module.quickAccessOrder ?? "-"}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="icon" onClick={() => openEdit(module)}>
                     <Pencil />
