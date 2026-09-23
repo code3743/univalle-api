@@ -12,12 +12,15 @@ export interface AppModule {
   description: string | null
   enabledIos: boolean
   enabledAndroid: boolean
+  disabled: boolean
+  disabledMessage: string | null
   quickAccessOrder: number | null
   sortOrder: number
 }
 
-export type ModuleFormValues = Omit<AppModule, "description"> & {
+export type ModuleFormValues = Omit<AppModule, "description" | "disabledMessage"> & {
   description: string
+  disabledMessage: string
 }
 
 export interface AppConfig {

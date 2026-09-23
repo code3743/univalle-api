@@ -56,6 +56,8 @@ model AppModule {
   description      String?
   enabledIos       Boolean @default(true)
   enabledAndroid   Boolean @default(true)
+  disabled         Boolean @default(false)
+  disabledMessage  String?
   quickAccessOrder Int?
   sortOrder        Int     @default(0)
 

@@ -23,6 +23,8 @@ export interface ModuleFormSubmitValues {
   description?: string
   enabledIos: boolean
   enabledAndroid: boolean
+  disabled: boolean
+  disabledMessage?: string
   sortOrder: number
   quickAccessOrder: number | null
 }
@@ -43,6 +45,8 @@ const emptyForm: ModuleFormSubmitValues = {
   description: "",
   enabledIos: true,
   enabledAndroid: true,
+  disabled: false,
+  disabledMessage: "",
   sortOrder: 0,
   quickAccessOrder: null,
 }
@@ -65,6 +69,8 @@ export function ModuleFormDialog({ open, onOpenChange, module, onSubmit }: Modul
               description: module.description ?? "",
               enabledIos: module.enabledIos,
               enabledAndroid: module.enabledAndroid,
+              disabled: module.disabled,
+              disabledMessage: module.disabledMessage ?? "",
               sortOrder: module.sortOrder,
               quickAccessOrder: module.quickAccessOrder,
             }
@@ -77,7 +83,10 @@ export function ModuleFormDialog({ open, onOpenChange, module, onSubmit }: Modul
     event.preventDefault()
     setIsSubmitting(true)
     try {
-      await onSubmit(values)
+      await onSubmit({
+        ...values,
+        disabledMessage: values.disabled ? values.disabledMessage : undefined,
+      })
       onOpenChange(false)
     } finally {
       setIsSubmitting(false)
@@ -214,6 +223,29 @@ export function ModuleFormDialog({ open, onOpenChange, module, onSubmit }: Modul
                 />
                 <Label htmlFor="enabledAndroid">Habilitado en Android</Label>
               </div>
+            </div>
+
+            <div className="grid gap-2">
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="disabled"
+                  checked={values.disabled}
+                  onCheckedChange={(checked) => setValues((v) => ({ ...v, disabled: checked }))}
+                />
+                <Label htmlFor="disabled">Deshabilitado (visible pero no ingresable)</Label>
+              </div>
+              {values.disabled && (
+                <div className="grid gap-2">
+                  <Label htmlFor="disabledMessage">Motivo</Label>
+                  <Textarea
+                    id="disabledMessage"
+                    required
+                    placeholder="Mensaje que vera el usuario, ej. En mantenimiento"
+                    value={values.disabledMessage ?? ""}
+                    onChange={(e) => setValues((v) => ({ ...v, disabledMessage: e.target.value }))}
+                  />
+                </div>
+              )}
             </div>
           </div>
 

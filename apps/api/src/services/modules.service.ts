@@ -11,6 +11,8 @@ export interface CreateModuleInput {
   description?: string;
   enabledIos?: boolean;
   enabledAndroid?: boolean;
+  disabled?: boolean;
+  disabledMessage?: string;
   quickAccessOrder?: number | null;
   sortOrder?: number;
 }
@@ -34,10 +36,12 @@ export async function listPublicModules(platform: Platform) {
     icon: module.icon,
     route: module.route,
     color: module.color,
+    disabled: module.disabled,
+    disabledMessage: module.disabled ? module.disabledMessage : null,
   }));
 
   const quickAccess = enabledModules
-    .filter((module) => module.quickAccessOrder !== null)
+    .filter((module) => module.quickAccessOrder !== null && !module.disabled)
     .sort((a, b) => a.quickAccessOrder! - b.quickAccessOrder!)
     .map((module) => module.key);
 

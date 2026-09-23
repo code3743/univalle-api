@@ -112,6 +112,7 @@ export function ModulesPage() {
               <TableHead>Etiqueta</TableHead>
               <TableHead>Ruta</TableHead>
               <TableHead>Plataformas</TableHead>
+              <TableHead>Estado</TableHead>
               <TableHead>Orden</TableHead>
               <TableHead>Acceso rapido</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
@@ -120,14 +121,14 @@ export function ModulesPage() {
           <TableBody>
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-muted-foreground">
+                <TableCell colSpan={9} className="text-center text-muted-foreground">
                   Cargando...
                 </TableCell>
               </TableRow>
             )}
             {!isLoading && modules.length === 0 && (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-muted-foreground">
+                <TableCell colSpan={9} className="text-center text-muted-foreground">
                   No hay modulos registrados.
                 </TableCell>
               </TableRow>
@@ -147,6 +148,15 @@ export function ModulesPage() {
                 <TableCell className="space-x-1">
                   {module.enabledIos && <Badge variant="secondary">iOS</Badge>}
                   {module.enabledAndroid && <Badge variant="secondary">Android</Badge>}
+                </TableCell>
+                <TableCell>
+                  {module.disabled ? (
+                    <Badge variant="destructive" title={module.disabledMessage ?? undefined}>
+                      Deshabilitado
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary">Activo</Badge>
+                  )}
                 </TableCell>
                 <TableCell>{module.sortOrder}</TableCell>
                 <TableCell>{module.quickAccessOrder ?? "-"}</TableCell>

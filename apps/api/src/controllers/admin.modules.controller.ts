@@ -13,7 +13,7 @@ const hexColorSchema = z
   .string()
   .regex(/^#[0-9A-Fa-f]{6}$/, "color must be a #RRGGBB hex string");
 
-const createModuleSchema = z.object({
+const baseModuleSchema = z.object({
   key: z.string().min(1),
   label: z.string().min(1),
   icon: z.string().min(1),
@@ -22,11 +22,31 @@ const createModuleSchema = z.object({
   description: z.string().optional(),
   enabledIos: z.boolean().optional(),
   enabledAndroid: z.boolean().optional(),
+  disabled: z.boolean().optional(),
+  disabledMessage: z.string().min(1).optional(),
   quickAccessOrder: z.number().int().nullable().optional(),
   sortOrder: z.number().int().optional(),
 });
 
-const updateModuleSchema = createModuleSchema.partial().omit({ key: true });
+const withDisabledMessageRequired = (
+  data: { disabled?: boolean; disabledMessage?: string },
+  ctx: z.RefinementCtx,
+) => {
+  if (data.disabled && !data.disabledMessage) {
+    ctx.addIssue({
+      code: "custom",
+      message: "disabledMessage is required when disabled is true",
+      path: ["disabledMessage"],
+    });
+  }
+};
+
+const createModuleSchema = baseModuleSchema.superRefine(withDisabledMessageRequired);
+
+const updateModuleSchema = baseModuleSchema
+  .partial()
+  .omit({ key: true })
+  .superRefine(withDisabledMessageRequired);
 
 export const adminModulesController = {
   async list(_req: Request, res: Response, next: NextFunction) {
