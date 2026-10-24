@@ -2,16 +2,16 @@
 import Layout from "../layouts/Layout.astro";
 import StoreBadges from "../components/StoreBadges.astro";
 
-const funcionalidades = [
-  { nombre: "Calificaciones y promedio", estado: "Disponible" },
-  { nombre: "Tabulado de materias", estado: "Disponible" },
-  { nombre: "Horario de clases", estado: "Disponible" },
-  { nombre: "Currículo / plan de estudios", estado: "Disponible" },
-  { nombre: "Carné estudiantil digital", estado: "Disponible" },
-  { nombre: "Evaluación docente", estado: "Disponible" },
-  { nombre: "Noticias de la universidad", estado: "Disponible" },
-  { nombre: "Restaurante universitario", estado: "En desarrollo" },
-  { nombre: "Biblioteca", estado: "En desarrollo" },
+const features = [
+  { name: "Calificaciones y promedio", state: "Disponible" },
+  { name: "Tabulado de materias", state: "Disponible" },
+  { name: "Horario de clases", state: "Disponible" },
+  { name: "Currículo / plan de estudios", state: "Disponible" },
+  { name: "Carné estudiantil digital", state: "Disponible" },
+  { name: "Evaluación docente", state: "Disponible" },
+  { name: "Noticias de la universidad", state: "Disponible" },
+  { name: "Restaurante universitario", state: "En pruebas" },
+  { name: "Biblioteca", state: "Disponible" },
 ];
 ---
 
@@ -67,18 +67,18 @@ const funcionalidades = [
     <h2 class="text-2xl font-semibold">Funcionalidades</h2>
     <ul class="mt-6 grid gap-3 sm:grid-cols-2">
       {
-        funcionalidades.map((f) => (
+        features.map((f) => (
           <li class="flex items-center justify-between rounded-lg border border-border px-4 py-3 text-sm">
-            <span>{f.nombre}</span>
+            <span>{f.name}</span>
             <span
               class:list={[
                 "rounded-full px-2.5 py-0.5 text-xs font-medium",
-                f.estado === "Disponible"
+                f.state === "Disponible"
                   ? "bg-brand/10 text-brand-dark"
                   : "bg-muted text-muted-foreground",
               ]}
             >
-              {f.estado}
+              {f.state}
             </span>
           </li>
         ))
